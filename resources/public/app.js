@@ -5,13 +5,22 @@ var checkNewImage;
 checkNewImage = function(){
   var xmlhttp;
   xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function(){
+
+  var load = function(){
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
       pictureDomElement.src = xmlhttp.responseText;
-      setTimeout(checkNewImage, 10000);
       deadManSwitch = true;
     }
+    setTimeout(checkNewImage, 10000);
   };
+
+  var error = function(){
+    setTimeout(checkNewImage, 10000);
+  };
+
+  xmlhttp.addEventListener("load", load);
+  xmlhttp.addEventListener("error", error);
+
   xmlhttp.open("GET", "current-picture-url", true);
   xmlhttp.send();
 };
